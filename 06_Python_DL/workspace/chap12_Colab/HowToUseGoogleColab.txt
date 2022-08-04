@@ -1,0 +1,75 @@
+1. 구글 Colab 사용하기
+
+[파일] -> [새 노트] 작성 
+
+[셀 입력] 
+import tensorflow as tf
+tf.__version__ # tensorflow 버전 확인 
+
+[셀 추가] -> [셀 입력]
+!python --version # python 버전 확인  
+
+[셀 추가] -> [셀 입력] 
+# local 파일 열기
+from google.colab import files
+import pandas as pd
+import io
+
+uploaded = files.upload() #  [파일 선택] -> iris.csv
+
+[셀 추가] -> [셀 입력] 
+df = pd.read_csv(io.BytesIO(uploaded['iris.csv']))
+df.info()
+
+[셀 추가] -> [셀 입력] 
+# drive 파일 열기  
+# 1) drive 연동
+from google.colab import drive
+drive.mount('/content/drive/') # URL 클릭 -> 암호키 복사/붙여넣기 
+
+[셀 추가] -> [셀 입력] 
+# 2) drive 확인 : Mounted as /content/drive 
+!ls '/content/drive/' # 'My Drive'
+
+[셀 추가] -> [셀 입력]
+# 3) directory file 목록 확인 : dataset은 google driver에서 기존에 만듬 
+!ls -Fcal '/content/drive/My Drive/dataset'
+-rw------- 1 root root 12382 Aug 19  2019 sam_kospi.csv
+-rw------- 1 root root  1170 Aug 21  2019 Titanic.csv
+
+[셀 추가] -> [셀 입력]
+# 4) 파일 처리 
+# Titanic.csv 파일 처리 
+import pandas as pd 
+titanic = pd.read_csv("/content/drive/My Drive/dataset/Titanic.csv")
+print(titanic)
+print(titanic.info())
+
+tab = pd.crosstab(titanic.Class, titanic.Survived)
+print(tab)
+
+titanic['Freq'].plot(kind='bar')
+
+[셀 추가] -> [셀 입력]
+# sam_kospi 파일 처리  
+kospi = pd.read_csv("/content/drive/My Drive/dataset/sam_kospi.csv")
+print(kospi.head())
+
+print(kospi.describe())
+kospi[['High', 'Low']].plot()
+
+# 노트 이름 변경 : [파일] -> [노트 이름 변경]
+# 노트 다운로드 : [파일] -> [.ipynb 다운로드]
+
+
+# 2. 가속기 사용하기
+ [파일] -> [새 노트] 작성 
+
+# CNN model 실습파일 복사 및 셀 붙여넣기 -> 소요 시간 체크 
+# chapter06 > lecture01 > step03_keras_cnn_cifar10.py
+
+[런타임] -> [런타임 유형 변경] -> 하드웨어 가속시 [GPU] 선택 -> [저장] - [실행]
+
+# 1) Spyder 총 소요시간 : 472.7871947288513 초
+# 2) Colab GPU 총 소요시간 : 42.531845569610596 초
+# 거의 10배 차이가 남을 확인할 수 있음
